@@ -6,6 +6,7 @@ var tasksInProgressEl = document.querySelector("#tasks-in-progress");
 var tasksCompletedEl = document.querySelector("#tasks-completed");
 var pageContentEl = document.querySelector("#page-content");
 
+//create array to hold tasks for saving
 var tasks = [];
 
 var taskFormHandler = function(event) {
@@ -57,7 +58,8 @@ var createTaskEl = function(taskDataObj){
     taskInfoEl.className = "task-info";
 
     //add HTML content to div
-    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
+    taskInfoEl.innerHTML = 
+      "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
     listItemEl.appendChild(taskInfoEl);
 
     taskDataObj.id = taskIdCounter;
@@ -75,6 +77,11 @@ var createTaskEl = function(taskDataObj){
 
     console.log(taskDataObj);
     console.log(taskDataObj.status);
+
+    //save task function
+    var saveTasks = function() {
+     localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
 };
 
 //Task actions
@@ -135,6 +142,11 @@ var completeEditTask = function(taskName, taskType, taskId) {
 
     alert("Task Updated!");
 
+    //save task function
+    var saveTasks = function() {
+     localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
     //remove data attribute from form 
     formEl.removeAttribute("data-task-id");
     //update formEL button to go back to saying "Add Task" instead of "Edit Task"
@@ -161,12 +173,11 @@ var taskButtonHandler = function(event) {
 };
 
 var taskStatusChangeHandler = function(event) {
-    console.log(event.target.value);
     //get task item's id
     var taskId = event.target.getAttribute("data-task-id");
 
-     //find the parent task item element based on the id
-     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    //find the parent task item element based on the id
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
 
     //get the currently selected option's value and convert to lowercase 
     var statusValue = event.target.value.toLowerCase();
@@ -188,6 +199,11 @@ var taskStatusChangeHandler = function(event) {
         }
     }
     console.log(tasks);
+
+    //save task function
+    var saveTasks = function() {
+     localStorage.setItem("tasks", JSON.stringify(tasks));
+     }
 };
 
 //Edit Task function
@@ -233,7 +249,17 @@ var deleteTask = function(taskId) {
 
     //reassing tasks array to be the same as updatedTaskArr
     tasks = updatedTaskArr;
+
+    //save task function
+    var saveTasks = function() {
+     localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
 }; 
+
+//save task function
+var saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
 // create new task
 formEl.addEventListener("submit", taskFormHandler);
